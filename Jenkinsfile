@@ -63,7 +63,7 @@ pipeline {
                 sh '''
                     netlify --version
                     netlify status
-                    netlify deploy --dir=build --prod --no-build
+                    netlify deploy --dir=build --prod
                 '''
             }
         }
