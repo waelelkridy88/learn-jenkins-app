@@ -53,7 +53,7 @@ pipeline {
                 }
             }
         }
-
+/*
         stage('Deploy staging') {
             agent { docker { image 'my-playwright'; reuseNode true } }
             steps {
@@ -76,7 +76,7 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Deploy prod') {
             agent { docker { image 'my-playwright'; reuseNode true } }
 
