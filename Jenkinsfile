@@ -53,53 +53,16 @@ pipeline {
                 }
             }
         }
-/*
-        stage('Deploy staging') {
-            agent { docker { image 'my-playwright'; reuseNode true } }
-            steps {
-                sh '''
-                    netlify --version
-                    echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
-                    netlify status
-                    netlify deploy --dir=build --site=$NETLIFY_SITE_ID --json > deploy-output.json
-                    export CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-output.json)
-                    echo "Staging URL: $CI_ENVIRONMENT_URL"
-                    npx playwright test --reporter=html
-                '''
-            }
-            post {
-                always {
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false,
-                                 reportDir: 'playwright-report', reportFiles: 'index.html',
-                                 reportName: 'Staging E2E', reportTitles: '',
-                                 useWrapperFileDirectly: true])
-                }
-            }
-        }
-*/
+
         stage('Deploy prod') {
             agent { docker { image 'my-playwright'; reuseNode true } }
-
-            environment {
-                CI_ENVIRONMENT_URL = 'https://verdant-zuccutto-09479c.netlify.app'
-            }
-
             steps {
                 sh '''
                     netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --dir=build --site=$NETLIFY_SITE_ID --prod
-                    npx playwright test --reporter=html
                 '''
-            }
-            post {
-                always {
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false,
-                                 reportDir: 'playwright-report', reportFiles: 'index.html',
-                                 reportName: 'Prod E2E', reportTitles: '',
-                                 useWrapperFileDirectly: true])
-                }
             }
         }
     }
